@@ -1,5 +1,7 @@
-export const INJECTED_DATA_ID = '1000';
-export const INJECTED_API_ID = '1001';
+import { i18n } from '@/common/util';
+
+export const INJECTED_DATA_ID = '0';
+export const INJECTED_API_ID = '1';
 export const extensionDetailsUrl = __.MV3 && `chrome://extensions/?id=${chrome.runtime.id}`;
 
 export const executeScript = __.MV3
@@ -26,21 +28,13 @@ export const registerInjector = async (isInstall) => {
           "style-src * 'unsafe-inline' data: blob:",
         messaging: true,
       }),
-      api.unregister().then(() => api.register([{
-        id: INJECTED_API_ID,
-        runAt: 'document_start',
-        allFrames: true,
-        matches: ['<all_urls>'],
-        js: [{ file: 'injected-web.js' }, { file: 'injected.js' }],
-      }])),
     ]);
   } catch (err) {
     if (!api || /'userScripts\.\w+' is not available|No changes to loaded/.test(err.message)) {
-      err = `Please enable ${ // eslint-disable-line no-ex-assign
-        +navigator.userAgent.match(/chrom\D+(\d{3,})/i)?.[1] >= 138
-          ? '"Allow User Scripts" in details for Violentmonkey'
-          : '"Developer Mode"'
-      } in chrome://extensions`;
+      // eslint-disable-next-line no-ex-assign
+      err = +navigator.userAgent.match(/chrom\D+(\d{3,})/i)?.[1] >= 138
+        ? i18n('userScriptsPermissionNote')
+        : i18n('userScriptsPermissionNoteOld');
     }
     if (isInstall) console.error(err);
     return err;
