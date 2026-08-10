@@ -1,5 +1,6 @@
 /* tslint:disable:no-namespace */
 /// <reference types="@violentmonkey/types" />
+/// <reference types="@types/chrome" />
 //#region Generic
 
 declare type NumBool = 0 | 1
