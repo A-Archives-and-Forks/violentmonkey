@@ -21,14 +21,7 @@ function readManifest() {
     minimum_chrome_version: '135.0', // chrome.userScripts.execute
     background: { service_worker: 'sw.js' },
     browser_specific_settings: undefined,
-    content_scripts: [{
-      id: '1',
-      js: ['injected-web.js', 'injected.js'],
-      allFrames: true,
-      matches: ['<all_urls>'],
-      runAt: 'document_start',
-      world: 'USER_SCRIPT',
-    }],
+    content_scripts: undefined,
     incognito: 'split',
     // TODO: use it when it graduates from Canary into Stable
     // message_serialization: 'structured_clone',

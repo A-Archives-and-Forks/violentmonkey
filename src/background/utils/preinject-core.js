@@ -1,5 +1,5 @@
 import { noop, sendTabCmd } from '@/common';
-import { executeScript, INJECTED_DATA_ID } from '@/common/browser-scripts-api';
+import { executeScript, INJECTED_API_ID, INJECTED_DATA_ID } from '@/common/browser-scripts-api';
 import initCache from '@/common/cache';
 import {
   __CODE, BLACKLIST, CACHE_KEYS, GLOB_ALL, kDownloadMode, kMainFrame, kSubFrame, REQ_KEYS, UNWRAP,
@@ -242,7 +242,10 @@ async function registerScriptDataMV3(inject, url) {
   try {
     await chrome.userScripts.unregister({ ids: [inject.id = INJECTED_DATA_ID + url] });
   } catch {/*ignore*/}
-  return chrome.userScripts.register([inject]);
+  // Chrome runs scripts in the order of register & update
+  const res = chrome.userScripts.register([inject]);
+  chrome.userScripts.update([{ id: INJECTED_API_ID, matches: ['<all_urls>', url] }]);
+  return res;
 }
 
 /** @param {VMInjection.Bag} bag */
