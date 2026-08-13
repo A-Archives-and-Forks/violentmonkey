@@ -37,7 +37,7 @@ declare namespace GMReq {
   type UserOpts = VMScriptGMDownloadOptions | VMScriptGMXHRDetails<any>;
   interface BG {
     cb: (data: GMReq.Message.BGAny) => Promise<void>;
-    cbe?: (err: string|Error) => Promise<void>;
+    cbe: (err: string|Error) => Promise<void>;
     /** use browser's `Cookie` header */
     cookie?: boolean;
     /** allow Set-Cookie header to affect browser */

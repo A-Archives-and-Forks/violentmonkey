@@ -59,7 +59,7 @@ addPublicCommands({
     });
     Object.defineProperties(req, { // non-enumerable props won't be messaged
       cb: {value: cb},
-      cbError: {value: cbError},
+      cbe: {value: cbError},
       resolve: {value: __.MV3 ? keepAlive() : noop},
     });
     if (IS_FIREFOX && opts.url instanceof Blob) {
