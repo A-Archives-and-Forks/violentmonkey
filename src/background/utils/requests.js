@@ -174,7 +174,7 @@ async function httpRequest(opts, events, id, req, src) {
     mime: overrideMimeType,
     props: xhrProps,
   };
-  toggleHeaderInjector(id, vmHeaders, xhrUrl);
+  toggleHeaderInjector(id, vmHeaders);
   if (__.MV3) {
     let responseHeaders;
     let ruleId = DNR_ID_XHR; while (xhrRules[++ruleId]) {/**/}
