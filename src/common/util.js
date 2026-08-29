@@ -303,10 +303,6 @@ export function normalizeTag(tag) {
   return tag.replace(/[^\w.-]/g, '');
 }
 
-export function escapeStringForRegExp(str) {
-  return str.replace(/[\\.?+[\]{}()|^$]/g, '\\$&');
-}
-
 export function leaseBlobUrl(blob) {
   const url = URL.createObjectURL(blob);
   makePause(BLOB_LIFE, url).then(URL.revokeObjectURL);
