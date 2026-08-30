@@ -432,7 +432,7 @@ export function createSyncService({
       authorizer.setRefreshToken(null);
     }
     serviceConfig.set({ token: null, refresh_token: null });
-    prepare();
+    prepare().catch(noop);
   }
 
   // --- Drive operations ---
@@ -803,7 +803,8 @@ export function createSyncService({
     try {
       await prepare();
     } catch {
-      // Sync in progress, ignore
+      // Prepare failed (e.g. another sync in progress), abort
+      return;
     }
     if (getSyncState().status !== SYNC_AUTHORIZED || getCurrent() !== name)
       return;
@@ -965,7 +966,7 @@ export function sync() {
 export function autoSync() {
   if (getOption('syncAutomatically')) return sync();
   const service = getService();
-  service?.prepare();
+  service?.prepare().catch(noop);
   console.info('[sync] auto-sync disabled, check later');
   if (!__.MV3) syncLater();
 }
