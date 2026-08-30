@@ -546,6 +546,7 @@ export function createSyncService({
   async function _sync() {
     const currentSyncMode = syncMode;
     syncMode = SYNC_MERGE;
+    const isPull = currentSyncMode === SYNC_PULL;
     progress = { finished: 0, total: 0 };
 
     const [remoteMeta, remoteData, localData] = await getSyncData();
@@ -650,7 +651,7 @@ export function createSyncService({
       if (info && info.lastModified === item.props.lastModified) {
         const updates = {};
         if (info.position !== item.props.position) {
-          if (globalLastModified <= remoteLastModified) {
+          if (globalLastModified <= remoteLastModified || isPull) {
             updates.props = { position: info.position };
           } else {
             info.position = item.props.position;
@@ -676,7 +677,7 @@ export function createSyncService({
         info.lastModified = now;
         remoteChanged = true;
       }
-      if (enableSync) {
+      if (enableSync && !isPull) {
         const local = localData.find((i) => i.props.uri === item.uri);
         const localEnabled = local?.config.enabled ?? 1;
         if (localEnabled !== info.enabled) {
@@ -767,7 +768,7 @@ export function createSyncService({
             remoteChanged = true;
           }
         }
-        if (remoteChanged) {
+        if (remoteChanged && !isPull) {
           const timestamp = Date.now();
           remoteMetaData.metadata.lastModified = timestamp;
           // Convert back to VM file format
