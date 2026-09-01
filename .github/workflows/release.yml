@@ -235,7 +235,7 @@ jobs:
   publish-crx:
     name: Publish CRX (MV2)
     needs: build
-    if: ${{ github.event_name != 'workflow_dispatch' || !inputs.dryRun }}
+    if: ${{ needs.build.outputs.prerelease != 'true' && (github.event_name != 'workflow_dispatch' || !inputs.dryRun) }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
